@@ -8,6 +8,8 @@ const About = () => {
         <h1>Acerca de nosotros</h1>
         <div id="info">
             Somos el equipo nº 2 de la asignatura de Ingeniería del Software Avanzada de la UNIR
+            Prueba de rama
+
         </div>
     </div>
 
