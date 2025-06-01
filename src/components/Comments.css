@@ -1,0 +1,48 @@
+.comments-section {
+    border-top: #ccc solid 1px; 
+    margin: 20px;
+    padding: 10px;
+ 
+}
+.comments-section h2 {
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+.comments-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+.comments-section li {
+    background: var(--light-gray);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.comments-section li p {
+    margin: 0;
+}
+.comments-section li span {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+}
+.comments-section form {
+    display: flex;
+    flex-direction: column;
+}
+.comments-section form input[type="text"],
+.comments-section form textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--primary-blue);
+    border-radius: 5px;
+}   
+.comments-section form button {
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
