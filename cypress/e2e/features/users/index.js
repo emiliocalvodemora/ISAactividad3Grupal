@@ -43,3 +43,14 @@ When('envía el formulario de login', () => {
 Then('ve un mensaje de bienvenida', () => {
   cy.contains(/bienvenido|login correcto/i, { timeout: 5000 }).should('exist');
 });
+
+
+When('completa el formulario de login con credenciales inválidas', () => {
+  cy.get('input[name="email"]').type('email@erroneo');
+  cy.get('input[name="password"]').type('passworderroneo');
+});
+
+
+Then('ve un mensaje de error', () => {
+  cy.contains(/Credenciales incorrectas|error de login|usuario o contraseña incorrectos/i, { timeout: 5000 }).should('exist');
+});
