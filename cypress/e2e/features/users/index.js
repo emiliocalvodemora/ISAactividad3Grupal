@@ -13,11 +13,14 @@ Given('el usuario navega a la página de registro', () => {
   cy.visit('/registro').wait(5000);
 });
 
-When('completa el formulario de registro con datos válidos', () => {
+When('completa el formulario de registro con usuario {string} , contraseña {string} y correo {string}', (usuario, password, correo) => {
+  user = { username: usuario, password, email: correo };
   cy.get('input[name="username"]').type(user.username);
   cy.get('input[name="email"]').type(user.email);
   cy.get('input[name="password"]').type(user.password);
+
 });
+
 
 When('envía el formulario de registro', () => {
   cy.get('form').submit();
