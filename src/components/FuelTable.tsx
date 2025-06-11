@@ -1,28 +1,22 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import FuelFilters from './FuelFilters';
+import AveragePrice from './AveragePrice';
 import './FuelTable.css';
 
 const PAGE_SIZE = 20;
 
-const FuelTable = ({ stations }) => {
-
-  // Filtros
+const FuelTable = ({ stations }: { stations: any[] }) => {
+  // Filtros y orden
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedFuel, setSelectedFuel] = useState('');
-
-  // Orden
   const [sortField, setSortField] = useState<string>('Precio Gasoleo A');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
-  // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-
 
   // Provincias y ciudades únicas
   const provinces = useMemo(
-    () => Array.from(new Set(stations.map(s => s.Provincia))).sort(),
+    () => Array.from(new Set(stations.map(s => s.Provincia))).sort() as string[],
     [stations]
   );
   const cities = useMemo(
@@ -33,7 +27,7 @@ const FuelTable = ({ stations }) => {
             .filter(s => !selectedProvince || s.Provincia === selectedProvince)
             .map(s => s.Municipio)
         )
-      ).sort(),
+      ).sort() as string[],
     [stations, selectedProvince]
   );
 
@@ -81,27 +75,67 @@ const FuelTable = ({ stations }) => {
     setCurrentPage(1);
   }, [selectedProvince, selectedCity, selectedFuel]);
 
-
+  // --- CONTENIDO ---
   return (
     <div>
       <h2>Precios de combustibles en gasolineras españolas</h2>
-      <FuelFilters
-        provinces={provinces}
-        cities={cities}
-        selectedProvince={selectedProvince}
-        selectedCity={selectedCity}
-        selectedFuel={selectedFuel}
-        onProvinceChange={setSelectedProvince}
-        onCityChange={setSelectedCity}
-        onFuelChange={setSelectedFuel}
-      />
+      {/* Contenedor para filtros + resumen alineados horizontalmente */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '1rem',
+          gap: '2rem',
+          flexWrap: 'nowrap'
+        }}
+      >
+        {/* Filtros en una sola fila */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', flexWrap: 'nowrap' }}>
+          <select
+            value={selectedProvince}
+            onChange={e => setSelectedProvince(e.target.value)}
+            style={{ minWidth: 170, height: 30 }}
+          >
+            <option value="">Provincia</option>
+            {provinces.map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+          <select
+            value={selectedCity}
+            onChange={e => setSelectedCity(e.target.value)}
+            style={{ minWidth: 220, height: 30 }}
+          >
+            <option value="">Ciudad</option>
+            {cities.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <select
+            value={selectedFuel}
+            onChange={e => setSelectedFuel(e.target.value)}
+            style={{ minWidth: 160, height: 30 }}
+          >
+            <option value="">Tipo de combustible</option>
+            <option value="Precio Gasoleo A">Gasóleo A</option>
+            <option value="Precio Gasolina 95 E5">Gasolina 95 E5</option>
+          </select>
+        </div>
+        {/* Resumen precios medios a la derecha */}
+        <div style={{ flex: '0 0 auto' }}>
+          <AveragePrice stations={stations} mode="inline" />
+        </div>
+      </div>
+
+      {/* TABLA */}
       <table className="fuel-table">
         <thead>
           <tr>
-            <th>Gasolinera</th>
-            <th>Dirección</th>
-            <th>Municipio</th>
-            <th>
+            <th className="gasolinera-col">Gasolinera</th>
+            <th className="direccion-col">Dirección</th>
+            <th className="municipio-col">Municipio</th>
+            <th className="price-col">
               <button
                 className="sortable"
                 onClick={() => handleSort('Precio Gasoleo A')}
@@ -109,7 +143,7 @@ const FuelTable = ({ stations }) => {
                 Gasóleo A {sortField === 'Precio Gasoleo A' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
               </button>
             </th>
-            <th>
+            <th className="price-col">
               <button
                 className="sortable"
                 onClick={() => handleSort('Precio Gasolina 95 E5')}
@@ -117,18 +151,18 @@ const FuelTable = ({ stations }) => {
                 Gasolina 95 E5 {sortField === 'Precio Gasolina 95 E5' ? (sortOrder === 'asc' ? '▲' : '▼') : ''}
               </button>
             </th>
-            <th>Detalle</th>
+            <th className="detalle-col">Detalle</th>
           </tr>
         </thead>
         <tbody>
           {paginatedStations.map((station, idx) => (
             <tr key={station.IDEESS || idx}>
-              <td>{station['Rótulo']}</td>
-              <td>{station['Dirección']}</td>
-              <td>{station['Municipio']}</td>
-              <td>{station['Precio Gasoleo A']}</td>
-              <td>{station['Precio Gasolina 95 E5']}</td>
-              <td>
+              <td className="gasolinera-col">{station['Rótulo']}</td>
+              <td className="direccion-col">{station['Dirección']}</td>
+              <td className="municipio-col">{station['Municipio']}</td>
+              <td className="price-col">{station['Precio Gasoleo A']}</td>
+              <td className="price-col">{station['Precio Gasolina 95 E5']}</td>
+              <td className="detalle-col">
                 <Link
                   to={`/station/${station.IDEESS}`}
                   state={{

@@ -5,20 +5,30 @@
   border-collapse: collapse;
   background: var(--white);
   color: var(--dark-gray);
+  table-layout: fixed;   /* ¡Fuerza los anchos! */
+}
+
+.fuel-table th,
+.fuel-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fuel-table th {
   background: var(--primary-blue);
   color: var(--white);
   padding: 0.75rem;
+  font-weight: bold;
+  text-align: left;
 }
 
-td, th {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 150px;
-}
+/* Ajusta los anchos aquí según prefieras */
+.fuel-table th.gasolinera-col, .fuel-table td.gasolinera-col { width: 170px; }
+.fuel-table th.direccion-col,  .fuel-table td.direccion-col  { width: 300px; }
+.fuel-table th.municipio-col,  .fuel-table td.municipio-col  { width: 130px; }
+.fuel-table th.price-col,      .fuel-table td.price-col      { width: 110px; text-align: right; }
+.fuel-table th.detalle-col,    .fuel-table td.detalle-col    { width: 110px; text-align: right; }
 
 .fuel-table td {
   padding: 0.5rem;
@@ -34,7 +44,6 @@ td, th {
   color: var(--primary-blue);
   text-decoration: underline;
 }
-
 .fuel-table a:hover {
   color: var(--yellow);
   font-weight: bold;
