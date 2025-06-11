@@ -35,7 +35,7 @@ function Header({ user }) {
                     }
                     {user &&
                         <>
-                            <span style={{ marginRight: '1rem' }}>Bienvenido, <Link to="/perfil">{user}</Link></span>
+                            <span style={{ marginRight: '1rem' }}>Bienvenido, <Link to="/profile">{user}</Link></span>
                             <button onClick={handleLogout}>Cerrar sesión</button>
                         </>
                     }
