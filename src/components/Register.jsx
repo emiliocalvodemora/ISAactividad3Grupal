@@ -1,4 +1,3 @@
-// src/components/Register.js
 import { useState } from 'react';
 import './Form.css';
 
@@ -18,7 +17,6 @@ function Register() {
     setMsg('');
     setError('');
 
-    // Validación básica en cliente
     if (!form.username || !form.email || !form.password) {
       setError('Todos los campos son obligatorios.');
       return;
@@ -32,26 +30,54 @@ function Register() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Error en el registro');
 
-      setMsg(data.message);
+      if (!res.ok) {
+        throw new Error(data.message || 'Error en el registro');
+      }
+
+      setMsg(data.message || 'Usuario registrado correctamente');
       setForm({ username: '', email: '', password: '' });
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'No se pudo completar el registro');
     }
   };
 
   return (
-      <form onSubmit={handleSubmit} className='register-form'>
-        <h2>Registro de Usuario</h2>
-        <input name="username" placeholder="Usuario" value={form.username} onChange={handleChange} required />
-        <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Contraseña" value={form.password} onChange={handleChange} required />
-        <button type="submit">Registrarse</button>
+    <form onSubmit={handleSubmit} className="register-form" data-testid="register-form">
+      <h2>Registro de Usuario</h2>
 
-        {msg && <p className="success">{msg}</p>}
-        {error && <p className="error">{error}</p>}
-      </form>
+      <input
+        name="username"
+        placeholder="Usuario"
+        value={form.username}
+        onChange={handleChange}
+        required
+        data-testid="input-username"
+      />
+      <input
+        name="email"
+        type="email"
+        placeholder="Email"
+        value={form.email}
+        onChange={handleChange}
+        required
+        data-testid="input-email"
+      />
+      <input
+        name="password"
+        type="password"
+        placeholder="Contraseña"
+        value={form.password}
+        onChange={handleChange}
+        required
+        data-testid="input-password"
+      />
+
+      <button type="submit" data-testid="submit-button">Registrarse</button>
+
+      {msg && <p className="success" data-testid="msg-success">{msg}</p>}
+      {error && <p className="error" data-testid="msg-error">{error}</p>}
+    </form>
   );
 }
 
