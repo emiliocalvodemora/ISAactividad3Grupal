@@ -43,11 +43,16 @@ Then('debería ver el mensaje {string}', (mensaje) => {
 });
 
 When('completa el formulario de registro con usuario {string} , contraseña {string} y correo {string}', () => {
-    cy.get('input[name="username"]').clear().type(user.username);
-    cy.get('input[name="email"]').clear().type(user.email);
-    cy.get('input[name="password"]').clear().type(user.password);
+  cy.get('input[name="username"]').clear();
+  cy.get('input[name="username"]').type(user.username);
 
+  cy.get('input[name="email"]').clear();
+  cy.get('input[name="email"]').type(user.email);
+
+  cy.get('input[name="password"]').clear();
+  cy.get('input[name="password"]').type(user.password);
 });
+
 
 When('envía el formulario de registro', () => {
     cy.get('form').submit();
