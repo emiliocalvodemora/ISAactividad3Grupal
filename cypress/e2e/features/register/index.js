@@ -14,9 +14,9 @@ Given('el usuario navega a la página de registro', () => {
 });
 
 Given('el servidor está caído', () => {
-    cy.intercept('POST', 'http://localhost:4000/api/register', {
-        forceNetworkError: true
-    }).as('registroFallido');
+  cy.intercept('POST', 'http://localhost:4000/api/register', {
+    forceNetworkError: true
+  }).as('serverDown');
 });
 
 Then('ve los campos {string}, {string}, {string}', (campo1, campo2, campo3) => {
