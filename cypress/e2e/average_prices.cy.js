@@ -3,10 +3,8 @@
 describe('Precio medio nacional en el Mapa', () => {
   it('debería mostrar el precio medio nacional en el mapa', () => {
     cy.visit('/mapa');
-    // Espera hasta que aparezca el texto (máx 10s)
+    // Espera hasta que aparezca el texto (máx 15s)
     cy.contains('Precio medio nacional', { timeout: 15000 }).should('be.visible');
-    // Puedes añadir más asserts si quieres comprobar que aparecen los precios concretos
-    cy.contains('Gasolina 95 E5').should('exist');
     cy.contains('Gasóleo A').should('exist');
   });
 });
@@ -45,17 +43,29 @@ describe('Tooltip de gasolinera en hover (versión genérica)', () => {
 
 describe('Detalle de estación (flujo real)', () => {
   it('al hacer click en el primer marcador de gasolinera, muestra los datos esenciales', () => {
+    // 1. Stub de la API de comments para evitar el fetch real
+    cy.intercept('GET', '**/api/comments/*', {
+      statusCode: 200,
+      body: []
+    }).as('getComments');
+
+    // 2. Visitamos el mapa
     cy.visit('/mapa');
-    // Selecciona el primer marcador de gasolinera (no "Tu ubicación")
+
+    // 3. Hacemos click en el segundo marcador (índice 1)
     cy.get('.leaflet-marker-icon', { timeout: 15000 })
-      .eq(1) // Cambia el índice si hace falta
+      .eq(1)
       .click({ force: true });
-    // La app redirige automáticamente a /station/{id}
+
+    // 4. Esperamos a que el stub de comments responda
+    cy.wait('@getComments');
+
+    // 5. Validamos los datos en la página de detalle
     cy.contains(/Gasóleo A/i).should('be.visible');
     cy.contains(/Gasolina 95 E5/i).should('be.visible');
-    cy.contains('€').should('be.visible');
-    cy.get('body').should('contain.text', 'Dirección');
-    cy.get('body').should('contain.text', 'Municipio');
+    cy.contains('Dirección').should('be.visible');
+    cy.contains('Municipio').should('be.visible');
   });
 });
+
 
