@@ -1,6 +1,6 @@
-Feature: Fuel prices tooltip on map
+Feature: Tooltip de precios en el mapa
 
-  Scenario: User sees fuel prices in tooltip when hovering a station marker
-    Given the user visits the map page
-    When they hover over any station marker
-    Then they see "Gasóleo A" and "Gasolina 95 E5" in the tooltip
+  Scenario: El usuario ve los precios en el tooltip al pasar el ratón sobre un marcador de estación
+    Given el usuario visita la página del mapa
+    When pasa el ratón por cualquier marcador de estación
+    Then ve "Gasóleo A" y "Gasolina 95 E5" en el tooltip
