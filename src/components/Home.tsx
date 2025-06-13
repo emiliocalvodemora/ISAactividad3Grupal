@@ -53,7 +53,7 @@ const Home = ({ stations }) => {
 
   return (
     <div className="home-container">
-      <h1>Buscasofa</h1>
+      <h1>Gasolineras</h1>
       <div className='description'>
         El mejor buscador de precios de combustible de España.
       </div>
