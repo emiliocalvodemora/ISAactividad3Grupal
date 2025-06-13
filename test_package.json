@@ -7,7 +7,7 @@
 Feature: Home Page
   Scenario: User visits the home page
     Given I open the home page
-    Then I should see "Bienvenido a BuscaSofa"
+    Then I should see "Bienvenido a Gasolineras"
 */
 
 // features/about.feature

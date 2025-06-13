@@ -1,9 +1,9 @@
 {
-  "name": "buscasofa",
+  "name": "Gasolineras",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://luispedraza.github.io/buscasofa",
+  "homepage": "https://github.com/emiliocalvodemora/ISAactividad3Grupal",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
