@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Form.css';
+import React from 'react';
 
 function Register() {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
@@ -8,12 +9,14 @@ function Register() {
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setMsg('');
     setError('');
+    setMsg('');
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setMsg('');
+    setError('');
 
     if (!form.username || !form.email || !form.password) {
       setError('Todos los campos son obligatorios.');
@@ -28,14 +31,10 @@ function Register() {
       });
 
       const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Error en el registro');
 
-      if (!res.ok) {
-        throw new Error(data.message || 'Error al registrarse');
-      }
-
-      setMsg(data.message || 'Registro exitoso');
+      setMsg(data.message);
       setForm({ username: '', email: '', password: '' });
-
     } catch (err) {
       setError(err.message);
     }
