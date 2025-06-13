@@ -1,18 +1,21 @@
 Feature: Registro de usuario
 
-  Scenario: Renderiza los campos y el botón de registro
+  Scenario: Registro exitoso
     Given el usuario navega a la página de registro
     Then ve los campos "Usuario", "Email", "Contraseña"
-    Then ve el botón "Registrarse"
-
-  Scenario: Registro exitoso de un nuevo usuario
-    Given el usuario navega a la página de registro
-    When completa el formulario de registro con usuario "<usuario>" , contraseña "<password>" y correo "<correo>"
+    And ve el botón "Registrarse"
+    When completa el formulario de registro con datos válidos
     And envía el formulario de registro
     Then ve un mensaje de confirmación de registro
 
-  Scenario: Mensaje de error si falla el fetch
-    Given el usuario navega a la página de registro estando el servidor caído
-    When completa el formulario de registro con usuario "<usuario>" , contraseña "<password>" y correo "<correo>"
+  Scenario: Campos vacíos
+    Given el usuario navega a la página de registro
+    When hago clic en "Registrarse"
+    Then ve un mensaje de error "Todos los campos son obligatorios."
+
+  Scenario: Servidor caído
+    Given el usuario navega a la página de registro
+    And el servidor está caído
+    When completa el formulario de registro con datos válidos
     And envía el formulario de registro
-    Then ve un mensaje de confirmación de "Error de conexión con el servidor"
+    Then ve un mensaje de error "Error al registrarse"
