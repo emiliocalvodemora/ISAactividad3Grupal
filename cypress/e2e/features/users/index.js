@@ -30,7 +30,7 @@ When('envía el formulario de registro', () => {
     if ($body.text().includes('Usuario o email ya existe')) {
       // Esperamos brevemente para evitar colisiones por tiempo similar
       cy.wait(500);
-      user = generateRandomUser();
+      user = randomUser();
       cy.visit('/registro');
       cy.get('input[name="username"]').clear().type(user.username);
       cy.get('input[name="email"]').clear().type(user.email);

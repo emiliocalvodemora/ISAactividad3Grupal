@@ -1,10 +1,7 @@
-import './App.css'
-
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { fetchFuelPrices } from './apis/fuelApiLib';
 import { FuelApi } from './apis/FuelApi';
-
 
 import Header from './components/Header';
 import FuelMap from './components/FuelMap';
@@ -27,25 +24,30 @@ import { NotFound } from './NotFound';
 // El componente Header se encarga de mostrar la barra de navegación y el estado de autenticación del usuario.
 // El componente Routes se encarga de definir las diferentes rutas de la aplicación y los componentes que se renderizan en cada ruta.
 // El componente BrowserRouter se encarga de gestionar la navegación entre las diferentes rutas de la aplicación.
-function App() {
 
+function App() {
   const [stations, setStations] = useState([]);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);   // Inicialmente cargando ...
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    useEffect(() => {
-      fetchFuelPrices()
-        .then(data => {
-          console.log(data);
-          setStations(data.ListaEESSPrecio);
-          setLoading(false);
-        })
-        .catch(err => {
-          setError(err.message);
-          setLoading(false);
-        });
-    }, []);
+  useEffect(() => {
+    fetchFuelPrices()
+      .then(data => {
+        console.log("DEBUG App.jsx: Datos recibidos de la API:", data);
+        if (data && data.ListaEESSPrecio) {
+          console.log("DEBUG App.jsx: Ejemplo de gasolinera:", data.ListaEESSPrecio[0]);
+        } else {
+          console.log("DEBUG App.jsx: ListaEESSPrecio NO existe o está vacía");
+        }
+        setStations(data?.ListaEESSPrecio ?? []);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
 
 /*   useEffect(() => {
     FuelApi.getInstance().getFuelPrices()
@@ -60,15 +62,13 @@ function App() {
       });
   }, []); */
 
+
+
   return (
     <BrowserRouter>
       <Header user={user} />
-      {
-        loading && <div className="loading">Cargando...</div>
-      }
-      {
-        error && <div className="error">Error: {error}</div>
-      }
+      {loading && <div className="loading">Cargando...</div>}
+      {error && <div className="error">Error: {error}</div>}
       {!loading && !error && (
         <Routes>
           <Route path="/registro" element={<Register />} />
@@ -80,12 +80,12 @@ function App() {
           <Route path="/mapa" element={<FuelMap stations={stations} />} />
           <Route path="/lista" element={<FuelTable stations={stations} />} />
           <Route path="/station/:id" element={<StationDetail stations={stations} user={user} />} />
-          <Route path="*" element={<NotFound />} /> {/* Pagina no encontrada */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       )}
       <Footer />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import './FuelMap.css'
@@ -7,6 +7,9 @@ import 'leaflet/dist/leaflet.css';
 
 import { getDistanceKm } from '@/apis/utils';
 import React from 'react';
+
+// Importa el resumen visual de precios medios (tu componente)
+import AveragePrice from './AveragePrice';
 
 const icon = new L.Icon({
   iconUrl: './gas-pump.png',
@@ -18,9 +21,8 @@ const userIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-
 /**
- * mapa de estaciones de servicio
+ * Mapa de estaciones de servicio
  */
 function FuelMap({ stations }) {
   const navigate = useNavigate();
@@ -51,8 +53,7 @@ function FuelMap({ stations }) {
       },
     }),
     [],
-  )
-
+  );
 
   // Filtrar estaciones a radius km de la ubicación del usuario
   const filteredStations = userLocation
@@ -71,38 +72,49 @@ function FuelMap({ stations }) {
     return <div>Obteniendo ubicación...</div>;
   }
 
-
   return (
     <>
-      <div style={{ margin: '1rem 0', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-        <div>
-          <label htmlFor="filtro-rotulo">Filtrar por rótulo:</label>
-          <input
-            type="text"
-            name="filtro-rotulo"
-            id="filtro-rotulo"
-            placeholder="Filtrar por rótulo"
-            value={filterRotulo}
-            onChange={e => setFilterRotulo(e.target.value)}
-            style={{ padding: '0.5rem', width: '250px', borderRadius: '4px', border: '1px solid #1976d2', marginLeft: '0.5rem' }}
-          />
+      {/* Filtros y resumen de precio medio en la misma línea */}
+      <div style={{
+        margin: '1rem 0',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '2rem',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <div>
+            <label htmlFor="filtro-rotulo">Filtrar por rótulo:</label>
+            <input
+              type="text"
+              name="filtro-rotulo"
+              id="filtro-rotulo"
+              placeholder="Filtrar por rótulo"
+              value={filterRotulo}
+              onChange={e => setFilterRotulo(e.target.value)}
+              style={{ padding: '0.5rem', width: '250px', borderRadius: '4px', border: '1px solid #1976d2', marginLeft: '0.5rem' }}
+            />
+          </div>
+          <div>
+            <label htmlFor="radius-slider">Radio: {radius} km</label>
+            <input
+              type="range"
+              id="radius-slider"
+              min={1}
+              max={30}
+              value={radius}
+              onChange={e => setRadius(Number(e.target.value))}
+              style={{ marginLeft: '1rem', verticalAlign: 'middle' }}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="radius-slider">Radio: {radius} km</label>
-          <input
-            type="range"
-            id="radius-slider"
-            min={1}
-            max={30}
-            value={radius}
-            onChange={e => setRadius(Number(e.target.value))}
-            style={{ marginLeft: '1rem', verticalAlign: 'middle' }}
-          />
-        </div>
+        {/* Componente de precio medio en modo inline */}
+        <AveragePrice stations={stations} mode="inline" />
       </div>
+
       <MapContainer center={userLocation} zoom={14} style={{ height: '80vh', width: '100%' }}>
         <TileLayer
-          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           url="http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
         />
         <Marker
@@ -117,29 +129,31 @@ function FuelMap({ stations }) {
         {filteredStations.map((station, idx) => (
           <Marker
             key={idx}
-            position={[parseFloat(station['Latitud'].replace(',', '.')), parseFloat(station['Longitud (WGS84)'].replace(',', '.'))]}
+            position={[
+              parseFloat(station['Latitud'].replace(',', '.')),
+              parseFloat(station['Longitud (WGS84)'].replace(',', '.'))
+            ]}
             icon={icon}
             eventHandlers={{
-              click: () => navigate(`/station/${station.IDEESS}`,
-                {
-                  state: {
-                    gobackLink: "/mapa"
-                  }
-                })
+              click: () => navigate(`/station/${station.IDEESS}`, {
+                state: {
+                  gobackLink: "/mapa"
+                }
+              })
             }}
           >
             <Tooltip>
               <strong>{station['Rótulo']}</strong><br />
               {station['Dirección']}<br />
-              {station['Municipio']}
+              {station['Municipio']}<br />
+              {/* Precios añadidos */}
+              Gasóleo A: <b>{station['Precio Gasoleo A']}</b> €<br />
+              Gasolina 95 E5: <b>{station['Precio Gasolina 95 E5']}</b> €
             </Tooltip>
           </Marker>
         ))}
       </MapContainer>
-
-
     </>
-
   );
 }
 

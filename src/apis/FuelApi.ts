@@ -41,7 +41,7 @@ class FuelApi {
         // Patrón cache
         if (this.data) return this.data;
         if (this.cacheLocalStorage) {
-            let localData = localStorage.getItem('buscasofaData');
+            let localData = localStorage.getItem('gasolinerasData');
             if (localData) {
                 this.data = JSON.parse(localData);
                 return this.data;
@@ -50,7 +50,7 @@ class FuelApi {
             this.data = await fetchFuelPrices();
             if (this.cacheLocalStorage) {
                 // Almacenamiento parcial en localStorage (el tamaño máximo es 5MB)
-                localStorage.setItem('buscasofaData', JSON.stringify(this.data));
+                localStorage.setItem('gasolinerasData', JSON.stringify(this.data));
                 //this.data.ListaEESSPrecio = this.data.ListaEESSPrecio.slice(0, 800);
             }
 

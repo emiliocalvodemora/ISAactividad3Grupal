@@ -9,5 +9,5 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  // base: '/buscasofa/',
+  // base: '/gasolineras/',
 })
