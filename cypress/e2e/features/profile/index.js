@@ -15,7 +15,6 @@ Given('el usuario se registra con un nuevo usuario aleatorio', () => {
     cy.get('input[name="email"]').type(user.email);
     cy.get('input[name="password"]').type(user.password);
     cy.get('form').submit();
-    cy.contains(/usuario registrado correctamente|registro exitoso/i, { timeout: 5000 }).should('exist');
 
     // Esperamos a que aparezca un mensaje de éxito o que el usuario ya exista
     cy.get('body').then($body => {

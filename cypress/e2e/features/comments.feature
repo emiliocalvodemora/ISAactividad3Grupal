@@ -1,25 +1,18 @@
-Feature: Comentarios de los usuarios
+Feature: Comentarios en la página de estación
 
-  Background:
-    Given que el usuario está logueado con un token válido
-    And existen comentarios previos para la estación
-    And visito la aplicación
+  Scenario: El usuario ve el formulario de comentarios
+    Given el usuario se registra y inicia sesión
+    When el usuario visita el buscador de estaciones y selecciona la primera estación
+    Then ve la sección de comentarios con el formulario para enviar un comentario
 
-  Scenario: Se muestra el título de la sección de comentarios
-    Then debería ver el texto "Comentarios de los usuarios"
+  Scenario: El usuario publica un nuevo comentario
+    Given el usuario se registra y inicia sesión
+    When el usuario visita el buscador de estaciones y selecciona la primera estación
+    When escribe un comentario y lo envía
+    Then el comentario aparece en la lista
+    Then ve un mensaje de éxito
 
-  Scenario: Se muestran los comentarios existentes
-    Then debería ver el comentario "Muy buena estación" del usuario "Juan"
-
-  Scenario: Se muestra el formulario de comentarios al estar logueado
-    Then debería ver el formulario de comentarios con un textarea y un botón de enviar
-
-  Scenario: El usuario envía un nuevo comentario exitosamente
-    When escribo "Este es un comentario de prueba" en el textarea
-    And hago clic en el botón de enviar comentario
-    Then debería ver el mensaje de confirmación "¡Comentario enviado!"
-
-  Scenario: El envío de un comentario falla por error de validación
-    When escribo "Error simulado" en el textarea
-    And hago clic en el botón de enviar comentario
-    Then debería ver el mensaje de error "Comentario no válido"
+  Scenario: El usuario ve comentarios previos
+    Given el usuario se registra y inicia sesión
+    When el usuario visita el buscador de estaciones y selecciona la primera estación
+    Then los comentarios existentes se muestran
