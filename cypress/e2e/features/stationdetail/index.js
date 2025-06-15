@@ -5,7 +5,6 @@ Given("el usuario navega a la home", function () {
 });
 
 Then("debería ver el logo de la aplicación", () => {
-    // Ajusta el selector según tu aplicación
     cy.get('img[alt="Logo"]').should('be.visible');
 });
 
