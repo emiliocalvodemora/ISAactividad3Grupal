@@ -7,14 +7,14 @@ describe('Visualización de la home de la aplicación', () => {
             // .wait(4000); // esperar para que lapágina se renderice completmente si la conexión es lenta
     });
 
-    it('El title de la web es Buscasofa', () => {
-        cy.title().should('eq', 'Buscasofa');
+    it('El title de la web es Gasolineras', () => {
+        cy.title().should('eq', 'Gasolineras');
     });
 
     it('El usuario ve el título de la aplicación', () => {
         cy.get('h1')
             .should('exist')
-            .contains('Buscasofa');
+            .contains('Gasolineras');
     });
 
     it('El usuaro ve la descripción de la aplicación en la home', () => {
